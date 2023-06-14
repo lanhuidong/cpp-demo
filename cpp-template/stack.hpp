@@ -3,7 +3,9 @@
  */
 #include <cassert>
 #include <ostream>
+#include <string>
 #include <vector>
+
 // 方案二
 template <typename T>
 class Stack;
@@ -14,6 +16,7 @@ template <typename T>
 class Stack {
    public:
     Stack() = default;
+    Stack(T elem) : elems({std::move(elem)}) {}
     ~Stack() = default;
     Stack(Stack const&) = default;             // 等价于Stack(Stack<T> const&) = default
     Stack& operator=(Stack const&) = default;  // 等价于Stack<T>& operator=(Stack<T> const&) = default
@@ -53,3 +56,6 @@ class Stack {
    private:
     std::vector<T> elems;
 };
+
+// c++17 deduction guide, 当元素为char const*时，Stack会被推断为Stack<std::string>
+Stack(char const*) -> Stack<std::string>;
